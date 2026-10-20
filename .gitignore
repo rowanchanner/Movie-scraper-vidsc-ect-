@@ -1,0 +1,22 @@
+# API Keys & Sensitive Secrets
+api_key.txt
+.env
+*.key
+
+# Python Bytecode & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+
+# Playwright & Browsers
+.cache/
+test-results/
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

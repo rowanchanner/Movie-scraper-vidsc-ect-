@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenith Stream • Raw Video Player</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- HLS.js for playing raw .m3u8 streams in native <video> -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+  <!-- Dash.js for playing raw .mpd DASH streams in native <video> -->
+  <script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand" id="brand-home">
+        <div class="brand-icon">🎬</div>
+        <div class="brand-text">
+          <span class="brand-title">ZENITH</span>
+          <span class="brand-badge">RAW STREAMS</span>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search movies or TV shows..." autocomplete="off">
+        <button id="search-clear" class="search-clear hidden">&times;</button>
+        <div id="search-spinner" class="spinner-small hidden"></div>
+      </div>
+
+      <!-- Type Switcher -->
+      <div class="media-toggle">
+        <button class="toggle-btn active" data-type="movie">Movies</button>
+        <button class="toggle-btn" data-type="tv">TV Shows</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-section" id="hero-banner">
+    <div class="hero-backdrop" id="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge" id="hero-badge">FEATURED TRENDING</div>
+      <h1 class="hero-title" id="hero-title">Loading Featured Title...</h1>
+      <div class="hero-meta" id="hero-meta">
+        <span class="meta-year" id="hero-year">----</span>
+        <span class="meta-rating" id="hero-rating">⭐ --</span>
+        <span class="meta-type" id="hero-type">MOVIE</span>
+      </div>
+      <p class="hero-overview" id="hero-overview">Fetching trending catalog from TMDB...</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="hero-play-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Watch Now
+        </button>
+        <button class="btn btn-secondary" id="hero-inspect-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          Inspect Raw Data
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Grid -->
+  <main class="main-content">
+    <div class="section-header">
+      <h2 class="section-title" id="shelf-title">Trending This Week</h2>
+      <span class="results-count" id="results-count">20 Titles</span>
+    </div>
+
+    <!-- Movie Cards Grid -->
+    <div class="card-grid" id="card-grid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state hidden" id="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No titles found</h3>
+      <p>Try searching with another keyword or title name.</p>
+    </div>
+  </main>
+
+  <!-- Modal: Native Video Player & Data Inspector -->
+  <div class="modal-overlay hidden" id="player-modal">
+    <div class="modal-window">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-info">
+          <h2 id="modal-title">Movie Title</h2>
+          <div class="modal-meta">
+            <span id="modal-year">2024</span> • 
+            <span id="modal-rating">⭐ 8.0</span> • 
+            <span id="modal-genres">Action, Sci-Fi</span> • 
+            <span id="modal-imdb" class="badge-imdb">IMDb: tt0000000</span>
+          </div>
+        </div>
+        <div class="modal-controls">
+          <button class="tab-btn active" id="tab-player-btn">Player</button>
+          <button class="tab-btn" id="tab-data-btn">Raw Stream Data</button>
+          <button class="close-btn" id="modal-close">&times;</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        
+        <!-- Tab 1: Native Video Player -->
+        <div class="tab-content" id="tab-player">
+          <!-- Provider Switcher Toolbar -->
+          <div class="server-bar">
+            <div class="server-bar-group">
+              <span class="server-label">Extract from:</span>
+              <div class="server-buttons" id="server-buttons">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+            <div class="quality-bar hidden" id="quality-bar">
+              <span class="quality-label">Quality:</span>
+              <div class="quality-buttons" id="quality-buttons">
+                <!-- Injected dynamically via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtitles Switcher Bar -->
+          <div class="subtitles-bar hidden" id="subtitles-bar">
+            <span class="subtitles-label">Subtitles:</span>
+            <div class="subtitles-buttons" id="subtitles-buttons">
+              <!-- Injected dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- TV Season/Episode Selector (Hidden for movies) -->
+          <div class="episode-bar hidden" id="episode-bar">
+            <label>Season: <select id="season-select"></select></label>
+            <label>Episode: <select id="episode-select"></select></label>
+          </div>
+
+          <!-- Native HTML5 Video Player (NO IFRAME!) -->
+          <div class="player-wrapper">
+            <div class="player-loader" id="player-loader">
+              <div class="spinner"></div>
+              <span id="loader-text">Extracting raw stream URL from provider...</span>
+            </div>
+            <video 
+              id="video-player" 
+              controls 
+              autoplay 
+              playsinline
+              crossorigin="anonymous"
+              style="width:100%;height:100%;background:#000;">
+              Your browser does not support the video tag.
+            </video>
+            <!-- Custom Subtitle Overlay for Guaranteed Crisp Subtitles -->
+            <div id="subtitles-overlay" class="subtitles-overlay hidden"></div>
+          </div>
+
+          <!-- Stream Info Bar -->
+          <div class="stream-info" id="stream-info" style="display:none;">
+            <div class="stream-info-inner">
+              <span class="stream-label">🔗 Raw Stream:</span>
+              <code class="stream-url" id="stream-url-display">--</code>
+              <button class="btn btn-secondary btn-sm" id="copy-stream-btn">Copy Link</button>
+              <button class="btn btn-primary btn-sm" id="copy-vlc-btn" title="Copy VLC / MPV command">Copy MPV / VLC Command</button>
+            </div>
+            <div class="stream-meta">
+              <span id="stream-type-badge" class="badge-stream">DASH</span>
+              <span id="stream-provider-badge" class="badge-provider">VidLink</span>
+              <span class="badge-stream" style="background:rgba(234,179,8,0.2);color:#fde047;border-color:rgba(234,179,8,0.3);">HEVC / H.265</span>
+            </div>
+          </div>
+
+          <!-- Description & Cast -->
+          <div class="modal-details">
+            <p id="modal-overview" class="modal-overview"></p>
+            <div id="modal-cast" class="modal-cast"></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Raw Data Inspector -->
+        <div class="tab-content hidden" id="tab-data">
+          <div class="inspector-header">
+            <span>Raw JSON from TMDB + Extracted Stream Data:</span>
+            <button class="btn btn-secondary btn-sm" id="copy-json-btn">Copy JSON</button>
+          </div>
+          <pre class="json-viewer" id="json-viewer"></pre>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=2"></script>
+</body>
+</html>
