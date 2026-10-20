@@ -63,7 +63,7 @@ Unlike traditional web wrappers that embed bloated, ad-infested `<iframe>` playe
    copy api_key.txt.example api_key.txt
    ```
 2. Paste your free [TMDB API Key](https://www.themoviedb.org/settings/api) inside `api_key.txt`.
-   *(Note: `api_key.txt` is listed in `.gitignore` and will never be pushed to git).*
+  
 
 ### 2. Install Dependencies
 ```bash
@@ -73,7 +73,7 @@ pip install requests
 ### 3. Launch
 - **Double-click `run.bat`** to start the streaming server at `http://localhost:8000`.
 - **Double-click `random_film.bat`** to pick a random trending film and launch it directly.
-- **Double-click `push_to_github.bat`** to stage, commit, and push updates to your GitHub repository.
+
 
 ---
 
